@@ -4,15 +4,24 @@ const PORT = process.env.PORT;
 
 const io = require("socket.io")(PORT, {
   cors: {
-    origin: ['http://localhost:3000', 'https://petmatchlove.netlify.app' , `${URL}`]
+    origin: [
+      "http://localhost:3000",
+      "https://petmatchlove.netlify.app",
+      `${URL}`,
+      "http://192.168.3.106:19000",
+    ],
   },
 });
 
 let users = [];
 
 const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) &&
+  if (!users.some((user) => user.userId === userId)) {
     users.push({ userId, socketId });
+  } else {
+    var index = users.findIndex((user) => user.userId == userId);
+    users.splice(index, 1, { userId, socketId });
+  }
 };
 
 const removeUser = (socketId) => {
@@ -22,7 +31,6 @@ const removeUser = (socketId) => {
 const getUser = (receiverId) => {
   return users.find((user) => user.userId === receiverId);
 };
-
 io.on("connection", (socket) => {
   socket.on("addUserToSocketArray", (userId) => {
     addUser(userId, socket.id);
@@ -31,7 +39,6 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", ({ userId, receiverId, message }) => {
     const user = getUser(receiverId);
-
     socket.to(user?.socketId).emit("newMessage", {
       userId,
       message,
