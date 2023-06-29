@@ -32,14 +32,15 @@ const getUser = (receiverId) => {
   return users.find((user) => user.userId === receiverId);
 };
 io.on("connection", (socket) => {
-  console.log("conected");
   socket.on("addUserToSocketArray", (userId) => {
+    console.log(userId);
     addUser(userId, socket.id);
     socket.emit("usersSocketsArray", users);
   });
 
   socket.on("sendMessage", ({ userId, receiverId, message }) => {
     const user = getUser(receiverId);
+    console.log(message);
     socket.to(user?.socketId).emit("newMessage", {
       userId,
       message,
