@@ -4,12 +4,7 @@ const PORT = process.env.PORT;
 
 const io = require("socket.io")(PORT, {
   cors: {
-    origin: [
-      "http://localhost:3000",
-      "https://petmatchlove.netlify.app",
-      `${URL}`,
-      "http://192.168.3.106:19000",
-    ],
+    origin: "*",
   },
 });
 
@@ -32,7 +27,7 @@ const getUser = (receiverId) => {
   return users.find((user) => user.userId === receiverId);
 };
 io.on("connection", (socket) => {
-  console.log('connected', socket.id)
+  console.log("connected", socket.id);
   socket.on("addUserToSocketArray", (userId) => {
     console.log(userId);
     addUser(userId, socket.id);
