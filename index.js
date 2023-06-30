@@ -4,7 +4,12 @@ const PORT = process.env.PORT;
 
 const io = require("socket.io")(PORT, {
   cors: {
-    origin: "*",
+    origin: [
+      "http://localhost:3000",
+      "https://petmatchlove.netlify.app",
+      `${URL}`,
+      "http://192.168.3.106:19000",
+    ],
   },
 });
 
