@@ -14,7 +14,7 @@ const io = require("socket.io")(PORT, {
 });
 
 let users = [];
-//test
+
 const addUser = (userId, socketId) => {
   if (!users.some((user) => user.userId === userId)) {
     users.push({ userId, socketId });
@@ -34,7 +34,7 @@ const getUser = (receiverId) => {
 io.on("connection", (socket) => {
   socket.on("addUserToSocketArray", (userId) => {
     addUser(userId, socket.id);
-    socket.emit("usersSocketsArray", users);
+    // socket.emit("usersSocketsArray", users);
   });
 
   socket.on("sendMessage", ({ userId, receiverId, message }) => {
